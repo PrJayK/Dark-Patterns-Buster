@@ -1,0 +1,93 @@
+body{
+    margin: 0;
+    padding: 0%;
+    background-image: url(https://img.freepik.com/free-photo/white-notebook-black-data-firewall_1150-1733.jpg?size=626&ext=jpg&ga=GA1.1.1448711260.1706400000&semt=sph);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+.outer{
+    height: 220px;
+    width: 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+}
+
+.heading{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    
+}
+h3{
+    color: rgb(34, 35, 35);
+    font-family: "Sixtyfour";
+    font-size: small;
+    -webkit-box-reflect: below 0.5px linear-gradient(transparent,#0004);
+    line-height: 0.70em;
+    outline: none;
+    animation: animate 5s linear infinite;
+
+}
+@keyframes animate{ 
+    0%,18%,20%,50.1%,60%,65.1%,80%,90.1%,92%
+    {
+        color: rgb(177, 177, 177);
+        text-shadow: none;
+
+    }
+    18.1%,20.1%,30%,50%,60.1%,65%,80.1%,90%,92.1%,100%
+    {
+        color: white;
+        text-shadow: 0 0 10px rgb(162, 224, 255),
+        0 0 20px rgb(162, 224, 255),
+        0 0 40px rgb(162, 224, 255),
+        0 0 80px rgb(162, 224, 255),
+        0 0 160px rgb(162, 224, 255),
+    }
+}
+.input{
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    color: #ffffff;
+}
+.textbox{
+    width: 15rem;
+    border-radius: 15px;
+    border-radius: black;
+}
+.button{
+    border-radius: 50px;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgb(255, 255, 255),
+    0 0 6px rgb(255, 255, 255);
+
+}
+button:hover{
+    box-shadow: 0 0 2px rgb(182, 255, 255),
+    0 0 6px rgb(182, 255, 255),0 0 9px rgb(182, 255, 255)
+    ,0 0 12px rgb(182, 255, 255),0 0 16px rgb(182, 255, 255);
+}
+.search-bar{
+    width: 100%;
+    max-width: 270px;
+    background: rgba(255,255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    border-radius: 60px;
+    padding: 10px 20px;
+}
+.search-bar input{
+    background: transparent;
+    flex: 1;
+    border: 0;
+    outline: none;
+    padding: 4px 3px;
+    font-size: 12px;
+    color: #cac7ca;
+}
+::placeholder{
+    color: rgb(194, 194, 194);
+}

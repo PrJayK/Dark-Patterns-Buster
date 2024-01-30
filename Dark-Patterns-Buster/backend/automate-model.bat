@@ -1,0 +1,1 @@
+python "Dark-Patterns-Buster\Dark-Patterns-Buster\backend\Model\model.py" >> batoutput.txt

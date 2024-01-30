@@ -1,1 +1,0 @@
-python "Model\model.py"
