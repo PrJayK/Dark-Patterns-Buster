@@ -13,7 +13,7 @@ Dark Patterns Buster exposes hidden website tactics and empowers you to make inf
 
 ### Confusion Matrix of all 7 Classes
 
-![Confusion Matrix](Dark Patterns Buster/backend/Model/model_metrics/confusion_matrix_rfc.png)
+![Confusion Matrix](backend/Model/model_metrics/confusion_matrix_rfc.png)
 
 **Comments:**
 
@@ -23,7 +23,7 @@ Dark Patterns Buster exposes hidden website tactics and empowers you to make inf
 
 ### Feature Importance Plot
 
-![Feature Importance](Dark Patterns Buster/backend/Model/model_metrics/feature_importance.png)
+![Feature Importance](backend/Model/model_metrics/feature_importance.png)
 
 **Comments:**
 
@@ -32,7 +32,7 @@ Dark Patterns Buster exposes hidden website tactics and empowers you to make inf
 
 ### Model Comparison Bar Plot
 
-![Model Comparison](Dark Patterns Buster/backend/Model/model_metrics/model_comparison.png)
+![Model Comparison](backend/Model/model_metrics/model_comparison.png)
 
 **Comments:**
 
@@ -41,7 +41,7 @@ Dark Patterns Buster exposes hidden website tactics and empowers you to make inf
 
 ### ROC Curve
 
-![ROC Curve](Dark Patterns Buster/backend/Model/model_metrics/roc_curve_rfc.png)
+![ROC Curve](backend/Model/model_metrics/roc_curve_rfc.png)
 
 **Comments:**
 
