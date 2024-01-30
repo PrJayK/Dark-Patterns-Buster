@@ -11,10 +11,12 @@ var  ID=0;
 
 const IGNORE_ELEMENTS=['SCRIPT','NOSCRIPT','STYLE','BR'];
 
+let page;
+
 
 async function Scraper(url){
     const browser = await puppeteer.launch();
-    const page = await browser.newPage();
+    page = await browser.newPage();
     await page.goto(url,{ timeout: 60000 });
     await page.screenshot({ path: './page.png', fullPage: 'true' });
     const body=await page.$('body');
@@ -97,23 +99,10 @@ async function getId(page,element){
 
 async function getTagName(element){
     return await (await element?.getProperty('tagName'))?.jsonValue();
-} 
+}
 
-async function scraperUtil(url){
-    const jsonFile =  await Scraper(url);
-    const parser = new Parser();
-    const cleanFile=fileCleaner(jsonFile);
-    const csv = parser.parse(cleanFile);
-    // console.log(csv);
-    const filePath = 'output.csv';
-    fs.writeFile(filePath, csv, 'utf8', (err) => {
-        if (err) {
-            console.error('Error writing CSV file:', err);
-        } else {
-            console.log(`CSV file saved successfully at ${filePath}`);
-        }
-    });
-    exec("../atuomate-model.py", function(err, stdout, stderr) {
+function executeBat() {
+    exec("../automate-model.bat", function(err, stdout, stderr) {
         if (err) {
             console.log('Error: ' + stderr);
         } else {
@@ -122,8 +111,63 @@ async function scraperUtil(url){
     });
 }
 
+async function executeBrowser() {
+
+    await page.evaluate(() => {
+        //read csv
+        
+        //and then update the html page
+    });
+
+    const html = await page.content();
+
+    fs.writeFileSync('modeled-file.html', html);
+
+    await page.goto(`file://${path.join(__dirname, 'modeled-file.html')}`);
+
+}
+
+async function waitForCompletion() {
+    let intervalID = setInterval(() => {
+        fs.readFile("../ids.csv", csv, 'utf8', async (err) => {
+            if(err) {
+                console.log("waiting for completion");
+            } else {
+                clearInterval(intervalID);
+
+                //launch a browser to display the edited file
+                await executeBrowser();
+            }
+        });
+
+    }, 500);
+}
+
+async function scraperUtil(url){
+    const jsonFile =  await Scraper(url);
+    const parser = new Parser();
+    const cleanFile = fileCleaner(jsonFile);
+    const csv = parser.parse(cleanFile);
+
+    const filePath = 'output.csv';
+    fs.writeFileSync(filePath, csv, 'utf8', (err) => {
+        if (err) {
+            console.error('Error writing CSV file:', err);
+        } else {
+            console.log(`CSV file saved successfully at ${filePath}`);
+        }
+    });
+
+    executeBat();
+
+    await waitForCompletion();
+
+}
+
 function fileCleaner(file){
-     return file.filter((e)=>e.text!="");
+    return file.filter((e) => {
+        e.text != ""
+    });
 }
 
 module.exports = {
