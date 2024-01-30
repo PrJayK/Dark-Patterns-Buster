@@ -18,7 +18,7 @@ async function Scraper(url){
     const body=await page.$('body');
     const child=await getChild(page,body);
     const texts=await Scrapy(page,body);
-    console.log(texts);
+    // console.log(texts);
     await browser.close();
     return texts;
 }
