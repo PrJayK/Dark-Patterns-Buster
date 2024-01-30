@@ -1,6 +1,8 @@
 const puppeteer=require('puppeteer-extra');
 const {Parser}=require('@json2csv/plainjs');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
+const exec = require('child_process').exec;
+const path = require('path');
 const fs = require('fs');
 
 puppeteer.use(StealthPlugin());
@@ -110,7 +112,14 @@ async function scraperUtil(url){
         } else {
             console.log(`CSV file saved successfully at ${filePath}`);
         }
-    })
+    });
+    exec("../atuomate-model.py", function(err, stdout, stderr) {
+        if (err) {
+            console.log('Error: ' + stderr);
+        } else {
+            console.log(stdout);
+        }
+    });
 }
 
 function fileCleaner(file){
