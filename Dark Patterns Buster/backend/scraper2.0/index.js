@@ -99,27 +99,73 @@ async function getTagName(element){
     return await (await element?.getProperty('tagName'))?.jsonValue();
 } 
 
-async function scraperUtil(url){
-    const jsonFile =  await Scraper(url);
-    const parser = new Parser();
-    const cleanFile=fileCleaner(jsonFile);
-    const csv = parser.parse(cleanFile);
-    // console.log(csv);
-    const filePath = './Model/output.csv';
-    fs.writeFile(filePath, csv, 'utf8', (err) => {
-        if (err) {
-            console.error('Error writing CSV file:', err);
-        } else {
-            console.log(`CSV file saved successfully at ${filePath}`);
-        }
-    });
-    exec("../atuomate-model.py", function(err, stdout, stderr) {
+function executeBat() {
+    exec("../automate-model.bat", function(err, stdout, stderr) {
         if (err) {
             console.log('Error: ' + stderr);
         } else {
             console.log(stdout);
         }
     });
+}
+
+async function executeBrowser() {
+
+    await page.evaluate(() => {
+        //read csv
+        console.log("in evaluate");
+        //and then update the html page
+    });
+
+    const html = await page.content();
+
+    fs.writeFileSync('modeled-file.html', html);
+
+    const browserVisible = await puppeteer.launch({
+        headless : false
+    });
+    let pageVisible = await browserVisible.newPage();
+
+    await pageVisible.goto(`file://${path.join(__dirname, 'modeled-file.html')}`);
+
+}
+
+async function waitForCompletion() {
+    let intervalID = setInterval(() => {
+        fs.readFile("../ids.csv", 'utf8', async (err) => {
+            if(err) {
+                console.log("waiting for completion");
+            } else {
+                clearInterval(intervalID);
+                //launch a browser to display the edited file
+                await executeBrowser();
+            }
+        });
+
+    }, 1000);
+}
+
+async function scraperUtil(url){
+    const jsonFile =  await Scraper(url);
+    // console.log(jsonFile);
+    const cleanFile = fileCleaner(jsonFile);
+    const parser = new Parser();
+
+    const csv = parser.parse(cleanFile);
+
+    const filePath = './Dark Patterns Buster/backend/Model/output.csv';
+    fs.writeFileSync(filePath, csv, 'utf8', (err) => {
+        if (err) {
+            console.error('Error writing CSV file:', err);
+        } else {
+            console.log(`CSV file saved successfully at ${filePath}`);
+        }
+    });
+
+    executeBat();
+
+    await waitForCompletion();
+
 }
 
 function fileCleaner(file){
