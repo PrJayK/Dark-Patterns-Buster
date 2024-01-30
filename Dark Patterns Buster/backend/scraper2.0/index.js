@@ -105,7 +105,7 @@ async function scraperUtil(url){
     const cleanFile=fileCleaner(jsonFile);
     const csv = parser.parse(cleanFile);
     // console.log(csv);
-    const filePath = 'output.csv';
+    const filePath = './Model/output.csv';
     fs.writeFile(filePath, csv, 'utf8', (err) => {
         if (err) {
             console.error('Error writing CSV file:', err);
