@@ -18,11 +18,11 @@ df = pd.read_csv('dataset.tsv', sep="\t", encoding="utf-8")
 X_train = df['text']
 vect.fit_transform(X_train)
 
-with open("rfc.pkl","rb") as f:
+with open("./saved_model/rfc.pkl","rb") as f:
     rfc = pickle.load(f)
-with open("svc.pkl","rb") as f:
+with open("./saved_model/svc.pkl","rb") as f:
     svc = pickle.load(f)
-with open("cbc.pkl","rb") as f:
+with open("./saved_model/cbc.pkl","rb") as f:
     cbc = pickle.load(f)
 
 
@@ -42,4 +42,4 @@ final_df = data_df.loc[data_df['label'] != "Not Dark Pattern"]
 final_df.drop('label',inplace = True,axis = 1)
 final_df.drop('text',inplace= True,axis = 1)
 
-final_df.to_csv("final_output.csv",index = False)
+final_df.to_csv("final_output.csv",index = False,header=false)
