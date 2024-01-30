@@ -123,7 +123,12 @@ async function executeBrowser() {
 
     fs.writeFileSync('modeled-file.html', html);
 
-    await page.goto(`file://${path.join(__dirname, 'modeled-file.html')}`);
+    const browserVisible = await puppeteer.launch({
+        headless : false
+    });
+    let pageVisible = await browserVisible.newPage();
+
+    await pageVisible.goto(`file://${path.join(__dirname, 'modeled-file.html')}`);
 
 }
 
