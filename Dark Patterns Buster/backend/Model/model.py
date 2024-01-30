@@ -42,4 +42,4 @@ final_df = data_df.loc[data_df['label'] != "Not Dark Pattern"]
 final_df.drop('label',inplace = True,axis = 1)
 final_df.drop('text',inplace= True,axis = 1)
 
-final_df.to_csv("final_output.csv",index = False,header=false)
+final_df.to_csv("final_output.csv",index = False,header=False)
