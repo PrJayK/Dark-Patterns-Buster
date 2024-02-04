@@ -1,1 +1,1 @@
-python "Dark-Patterns-Buster\Dark-Patterns-Buster\backend\Model\model.py" >> batoutput.txt
+python "Dark-Patterns-Buster\backend\Model\model.py" >> batoutput.txt

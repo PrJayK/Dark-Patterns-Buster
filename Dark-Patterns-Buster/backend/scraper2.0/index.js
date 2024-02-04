@@ -11,19 +11,21 @@ var  ID=0;
 
 const IGNORE_ELEMENTS=['SCRIPT','NOSCRIPT','STYLE','BR'];
 let page;
+let ii = 0;
 
 async function Scraper(url){
     const browser = await puppeteer.launch();
     console.log("Loading page");
     page = await browser.newPage();
     console.log("Going to page");
-    await page.goto(url,{ timeout: 60000 });
+    await page.goto(url,{ timeout: 120000 });
     console.log("Landed at page");
-    await page.screenshot({ path: './Dark-Patterns-Buster/Dark-Patterns-Buster/backend/scraper2.0/page.png', fullPage: 'true' });
+    await page.screenshot({ path: './Dark-Patterns-Buster/backend/scraper2.0/page.png', fullPage: 'true' });
     const body=await page.$('body');
     const child=await getChild(page,body);
     console.log("starting recursion");
     const texts=await Scrapy(page,body);
+    console.log("ii:"+ii);
     // console.log(texts);
     // await browser.close();
     return texts;
@@ -84,7 +86,7 @@ async function getChild(page,element){
 async function isIgnoredElement(element){
     const tagName=await getTagName(element);
     return typeof tagName === 'string' && IGNORE_ELEMENTS.includes(tagName.toUpperCase());
-
+    
 }
 
 async function getNodeType(page,element){
@@ -92,10 +94,21 @@ async function getNodeType(page,element){
     return nodetype;
 }
 
+function fileCleaner(file){
+    return file.filter((e)=>e.text!="");
+}
+
 async function getId(page,element){
     let id=await page.evaluate((e)=>e.id,element);
     if(!id){
         id=`dark-patterns-buster-${ID}`;// random id given to elements with no id
+        //Setting if
+        if(!element&&(await getNodeType(page,element))!=3){
+            await page.evaluate((element, id) => {
+                ii++;
+                element.setAttribute("id", id);
+            }, element, id);
+        }
         ID=ID+1;
     }
     return id;
@@ -107,7 +120,7 @@ async function getTagName(element){
 
 function executeBat() {
     console.log("executing bat file")
-    exec(".\\Dark-Patterns-Buster\\Dark-Patterns-Buster\\backend\\automate-model.bat", function(err, stdout, stderr) {
+    exec(".\\Dark-Patterns-Buster\\backend\\automate-model.bat", function(err, stdout, stderr) {
         if (err) {
             console.log('Error: ' + stderr);
         } else {
@@ -119,19 +132,20 @@ function executeBat() {
 async function executeBrowser(fileContent) {
     console.log("in executeBrowser");
 
-    await page.evaluate((fileContent) => {
+    let i = await page.evaluate((fileContent) => {
         //read csv
-        console.log("in evaluate");
-        let darkIds;
-        darkIds = fileContent.split('\n');
-        console.log(darkIds.length);
-        darkIds.forEach(element => {
-            const darkElement = document.getElementById(element);
+        let darkIds = fileContent.split('\r\n');
+        let i = 0;
+        darkIds.forEach(id => {
+            const darkElement = document.getElementById(id);
             if (darkElement) {
+                i++;
                 darkElement.setAttribute("style", (darkElement.getAttribute("style") || "") + "border: 2px solid red;");
             }
         });
+        return i;
     }, fileContent);
+    console.log("i"+i);
     console.log("thorugh evaluate");
     
     //and then update the html page
@@ -151,7 +165,7 @@ async function executeBrowser(fileContent) {
 async function waitForCompletionAndExecuteBrowser() {
 
     let intervalID = setInterval(() => {
-        fs.readFile("./Dark-Patterns-Buster/Dark-Patterns-Buster/backend/Model/ids.csv", 'utf8', async (err, data) => {
+        fs.readFile("./Dark-Patterns-Buster/backend/Model/ids.csv", 'utf8', async (err, data) => {
             if(err) {
                 console.log("waiting for completion, err: " + err);
             } else {
@@ -173,7 +187,7 @@ async function scraperUtil(url){
 
     const csv = parser.parse(cleanFile);
 
-    const filePath = './Dark-Patterns-Buster/Dark-Patterns-Buster/backend/Model/output.csv';
+    const filePath = './Dark-Patterns-Buster/backend/Model/output.csv';
     fs.writeFileSync(filePath, csv, 'utf8', (err) => {
         if (err) {
             console.error('Error writing CSV file:', err);
@@ -186,10 +200,6 @@ async function scraperUtil(url){
 
     await waitForCompletionAndExecuteBrowser();
 
-}
-
-function fileCleaner(file){
-    return file.filter((e)=>e.text!="");
 }
 
 scraperUtil("https://www.amazon.in");
